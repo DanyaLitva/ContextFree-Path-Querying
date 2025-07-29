@@ -108,7 +108,7 @@ int main()
     size_t finish = 0;
 
     cout << "Start and Finish vertex: ";
-    cin >> start, finish;
+    cin >> start >> finish;
     cout << endl;
 
     bool found = false;
