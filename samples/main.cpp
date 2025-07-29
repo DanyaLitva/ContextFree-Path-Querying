@@ -107,10 +107,8 @@ int main()
     size_t start = 0;
     size_t finish = 0;
 
-    cout << "Start vertex: ";
-    cin >> start;
-    cout << "Finish vertex: ";
-    cin >> finish;
+    cout << "Start and Finish vertex: ";
+    cin >> start, finish;
     cout << endl;
 
     bool found = false;
@@ -130,7 +128,7 @@ int main()
         }
 
         cout << endl;
-        cout << "Terminals: ";
+        cout << endl <<"Terminals: ";
         for (size_t i = 0; i < path.size() - 1; ++i) {
             size_t from = path[i];
             size_t to = path[i + 1];

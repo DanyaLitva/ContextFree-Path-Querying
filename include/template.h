@@ -10,6 +10,8 @@
 
 int check();
 
+using namespace std;
+
 vector<vector<vector<size_t>>> matrix_mul(vector<vector<vector<size_t>>> left, vector<vector<vector<size_t>>> right, size_t vertex);
 
 vector<vector<vector<size_t>>> matrix_add(vector<vector<vector<size_t>>> left, vector<vector<vector<size_t>>> right, size_t vertex);
