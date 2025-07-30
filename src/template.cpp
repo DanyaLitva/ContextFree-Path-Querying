@@ -120,11 +120,12 @@ bool extract_path(vector<size_t>& path, size_t nt, size_t start, size_t finish, 
         }
     }
 
+    size_t k = matrix[nt].back()[start][finish].front();
+
     for (size_t rule_idx = 0; rule_idx < bin_rules[nt].size(); ++rule_idx) {
         size_t B = bin_rules[nt][rule_idx][0];
         size_t C = bin_rules[nt][rule_idx][1];
-
-        size_t k = matrix[nt].back()[start][finish].front();
+        //A(=nt) -> B C
         //vector<size_t> k_list = matrix[nt].back()[start][finish];
         if (!matrix[B].back()[start][k].empty() &&
             !matrix[C].back()[k][finish].empty()) {
@@ -141,6 +142,5 @@ bool extract_path(vector<size_t>& path, size_t nt, size_t start, size_t finish, 
             }
         }
     }
-    //}
     return false;
 }
