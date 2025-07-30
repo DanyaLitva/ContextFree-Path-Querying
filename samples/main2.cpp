@@ -7,7 +7,7 @@
 using namespace std;
 
 const bool Detailed_output = 0;
-
+const bool Time_output = 0;
 int main()
 {
     size_t count_vertex = 5;
@@ -106,7 +106,7 @@ int main()
     cout << "Start and Finish vertex: ";
     cin >> start >> finish;
     cout << endl;
-
+    auto start_time = std::chrono::steady_clock::now();
     bool found = false;
     for (size_t nt = 0; nt < nonterms_count; ++nt) {
         if (!matrix[nt].back()[start][finish].empty()) {
@@ -139,4 +139,7 @@ int main()
 
         cout << endl;
     }
+    auto end_time = std::chrono::steady_clock::now();
+    double elapsed = std::chrono::duration_cast<std::chrono::milliseconds> (end_time - start_time).count();
+    cout << "time: " << elapsed<< " miliseconds" << endl;
 }

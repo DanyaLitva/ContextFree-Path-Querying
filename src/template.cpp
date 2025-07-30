@@ -32,8 +32,8 @@ vector<vector<vector<size_t>>> matrix_add(vector<vector<vector<size_t>>> left, v
 
     for (size_t i = 0; i < vertex; ++i) {
         for (size_t j = 0; j < vertex; ++j) {
-            sort(left[i][j].begin(), left[i][j].end());
-            sort(right[i][j].begin(), right[i][j].end());
+            //sort(left[i][j].begin(), left[i][j].end());
+            //sort(right[i][j].begin(), right[i][j].end());
 
 
             size_t idx_left = 0;
@@ -127,6 +127,7 @@ bool extract_path(vector<size_t>& path, size_t nt, size_t start, size_t finish, 
         size_t C = bin_rules[nt][rule_idx][1];
         //A(=nt) -> B C
         //vector<size_t> k_list = matrix[nt].back()[start][finish];
+        //for (k = 0; k < count_vertex; ++k) {
         if (!matrix[B].back()[start][k].empty() &&
             !matrix[C].back()[k][finish].empty()) {
 
@@ -140,6 +141,7 @@ bool extract_path(vector<size_t>& path, size_t nt, size_t start, size_t finish, 
                 path.insert(path.end(), sub_path2.begin() + 1, sub_path2.end());
                 return true;
             }
+            //}
         }
     }
     return false;
