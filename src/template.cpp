@@ -124,22 +124,23 @@ bool extract_path(vector<size_t>& path, size_t nt, size_t start, size_t finish, 
         size_t B = bin_rules[nt][rule_idx][0];
         size_t C = bin_rules[nt][rule_idx][1];
 
-        for (size_t k = 0; k < count_vertex; ++k) {
-            if (!matrix[B].back()[start][k].empty() &&
-                !matrix[C].back()[k][finish].empty()) {
+        size_t k = matrix[nt].back()[start][finish].front();
+        //vector<size_t> k_list = matrix[nt].back()[start][finish];
+        if (!matrix[B].back()[start][k].empty() &&
+            !matrix[C].back()[k][finish].empty()) {
 
-                vector<size_t> sub_path1;
-                vector<size_t> sub_path2;
+            vector<size_t> sub_path1;
+            vector<size_t> sub_path2;
 
-                if (extract_path(sub_path1, B, start, k, matrix, bin_rules, term_matrix, term_rules, count_vertex) &&
-                    extract_path(sub_path2, C, k, finish, matrix, bin_rules, term_matrix, term_rules, count_vertex)) {
+            if (extract_path(sub_path1, B, start, k, matrix, bin_rules, term_matrix, term_rules, count_vertex) &&
+                extract_path(sub_path2, C, k, finish, matrix, bin_rules, term_matrix, term_rules, count_vertex)) {
 
-                    path.insert(path.end(), sub_path1.begin(), sub_path1.end());
-                    path.insert(path.end(), sub_path2.begin() + 1, sub_path2.end());
-                    return true;
-                }
+                path.insert(path.end(), sub_path1.begin(), sub_path1.end());
+                path.insert(path.end(), sub_path2.begin() + 1, sub_path2.end());
+                return true;
             }
         }
     }
+    //}
     return false;
 }
