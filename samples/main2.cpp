@@ -141,5 +141,5 @@ int main()
     }
     auto end_time = std::chrono::steady_clock::now();
     double elapsed = std::chrono::duration_cast<std::chrono::milliseconds> (end_time - start_time).count();
-    cout << "time: " << elapsed<< " miliseconds" << endl;
+    if(Time_output)cout << "time: " << elapsed<< " miliseconds" << endl;
 }
