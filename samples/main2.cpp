@@ -7,12 +7,12 @@
 using namespace std;
 
 const bool Detailed_output = 0;
-
+const bool Time_output = 0;
 int main()
 {
-    size_t count_vertex = 10;
+    size_t count_vertex = 5;
     size_t nonterms_count = 4; 
-    size_t terms_count = 4;    
+    size_t terms_count = 3;    
     vector <vector <vector<size_t> > >bin_rules(nonterms_count, vector<vector<size_t>>(nonterms_count, vector<size_t>()));
     vector<vector<bool>> term_rules(nonterms_count, vector<bool>(terms_count + 1));
     vector<vector<vector<bool>>> term_matrix(count_vertex, vector<vector<bool>>(count_vertex, vector<bool>(terms_count + 1)));
@@ -22,41 +22,35 @@ int main()
     //продукции
     bin_rules = {
         {
-            {3,2}//N0
+            {2,1}//N0
 },
     {
-        {1,0}//N1
+        {0,3}//N1
 },
     {
-        {3,0}, //N2
+        {}, //N2
 },
     {
-        {0,1},{1,2}//N3
+        {}//N3
 }
     };
 
     //терминалы
     term_rules = {
         // дополнительный элемент - пустое слово 
-        {1,0,0,0,0}, //N0 -> a
-        {0,1,0,0,0}, //N1 -> b
-        {0,0,1,0,0}, //N2 -> c
-        {0,0,0,1,0}  //N3 -> d
+        {0,0,1,0,0}, //N0 -> c
+        {0,0,0,0,0}, //N1 -> 
+        {1,0,0,0,0}, //N2 -> a
+        {0,1,0,0,0}  //N3 -> b
     };
 
     term_matrix = {
-        //      0           1           2           3           4           5           6           7           8           9
-          {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}}, //0
-          {{0,0,0,0,0},{0,0,0,0,0},{1,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{1,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}}, //1
-          {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,1,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}}, //2
-          {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,1,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}}, //3
-          {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,1,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}}, //4
-          {{1,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}}, //5
-          {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{1,0,0,0,0},{0,0,0,1,0},{0,0,0,0,0}}, //6
-          {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,1,0,0},{0,0,0,0,0}}, //7
-          {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}}, //8
-          {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,1,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}}, //9
-
+        //     0         1         2         3         4     
+          {{0,0,0,0},{1,0,0,0},{0,0,0,0},{0,0,1,0},{0,0,0,0}}, //0
+          {{0,0,0,0},{0,0,0,0},{1,0,0,0},{0,0,0,0},{0,0,0,0}}, //1
+          {{1,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}}, //2
+          {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,1,0,0}}, //3
+          {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,1,0,0},{0,0,0,0}} //4
     };
 
     for (size_t i = 0; i < nonterms_count; ++i) {
@@ -83,6 +77,7 @@ int main()
         for (size_t _nonterms_count = 0; _nonterms_count < nonterms_count; ++_nonterms_count) {
             for (size_t it_rule = 0; it_rule < bin_rules[_nonterms_count].size(); ++it_rule) {
                 vector<vector<vector<size_t>>> res_matrix;
+
                 if ((bin_rules[_nonterms_count][it_rule].size() != 0)) {
                     res_matrix = matrix_mul(matrix[(bin_rules[_nonterms_count][it_rule][0])].back(), matrix[(bin_rules[_nonterms_count][it_rule][1])].back(), count_vertex);
 
@@ -96,6 +91,7 @@ int main()
             }
         }
     }
+
     if (Detailed_output) {
         cout << endl << endl;
         cout << "After the closure:" << endl << endl;
@@ -110,7 +106,7 @@ int main()
     cout << "Start and Finish vertex: ";
     cin >> start >> finish;
     cout << endl;
-
+    auto start_time = std::chrono::steady_clock::now();
     bool found = false;
     for (size_t nt = 0; nt < nonterms_count; ++nt) {
         if (!matrix[nt].back()[start][finish].empty()) {
@@ -143,4 +139,7 @@ int main()
 
         cout << endl;
     }
+    auto end_time = std::chrono::steady_clock::now();
+    double elapsed = std::chrono::duration_cast<std::chrono::milliseconds> (end_time - start_time).count();
+    cout << "time: " << elapsed<< " miliseconds" << endl;
 }
