@@ -12,8 +12,12 @@
     cmake ../
     cmake --build . --config Release
     ```
-
-
+To launch:
+ ```
+cd bin
+test_project.exe
+main.exe
+ ```
 
 **On linux, with CMake**
 1. Install mpi with `sudo apt install mpich`
@@ -25,4 +29,9 @@
     cmake ../
     cmake --build . --config Release
     ```
-
+To launch:
+ ```
+cd bin
+test_project
+main
+ ```
