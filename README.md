@@ -12,8 +12,7 @@
     cmake ../
     cmake --build . --config Release
     ```
-To run tests, type `mpiexec -n 4 .\bin\test_project.exe`  
-To run sample, type `mpiexec -n 4 .\bin\main.exe`
+
 
 
 **On linux, with CMake**
@@ -26,5 +25,4 @@ To run sample, type `mpiexec -n 4 .\bin\main.exe`
     cmake ../
     cmake --build . --config Release
     ```
-To run tests, type `mpirun -n 4 ./bin/test_project`  
-To run sample, type `mpirun -n 4 ./bin/main`
+
