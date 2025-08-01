@@ -1,0 +1,20 @@
+version: 2
+fix: false
+lines:
+  - 500
+include:
+  - "**/template.h"
+  - "include/**"
+  - "src/**"
+exclude:
+  - "build/**"
+  - "**/third_party/**"
+format:
+  style: file
+  fallback-style: LLVM
+tidy:
+  checks: >
+      -*,
+      modernize-*,
+      -modernize-use-trailing-return-type
+  header-filter: ".*"

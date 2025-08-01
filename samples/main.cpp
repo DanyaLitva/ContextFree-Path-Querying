@@ -2,7 +2,9 @@
 //Litvyakov D. D.
 //
 
+// NOLINTBEGIN
 #include "template.h"
+// NOLINTEND
 
 using namespace std;
 

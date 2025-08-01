@@ -2,8 +2,9 @@
 //Litvyakov D. D.
 //
 
-
+// NOLINTBEGIN
 #include "template.h"
+// NOLINTEND
 
 int check() { return 1; }
 
