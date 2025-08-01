@@ -11,8 +11,8 @@ const bool Detailed_output = 0;
 int main()
 {
     size_t count_vertex = 10;
-    size_t nonterms_count = 4; 
-    size_t terms_count = 4;    
+    size_t nonterms_count = 4;
+    size_t terms_count = 4;
     vector <vector <vector<size_t> > >bin_rules(nonterms_count, vector<vector<size_t>>(nonterms_count, vector<size_t>()));
     vector<vector<bool>> term_rules(nonterms_count, vector<bool>(terms_count + 1));
     vector<vector<vector<bool>>> term_matrix(count_vertex, vector<vector<bool>>(count_vertex, vector<bool>(terms_count + 1)));
@@ -77,6 +77,10 @@ int main()
 
     if (Detailed_output) print_last_matrix(matrix);
 
+    for (size_t i = 0; i < nonterms_count; ++i) {
+        matrix[i].push_back(matrix[i].front());
+    }
+
     bool flag = 1;
     while (flag) {
         flag = 0;
@@ -90,12 +94,13 @@ int main()
 
                     if (!matrix_eq(matrix[_nonterms_count].back(), res_matrix, count_vertex)) {
                         flag = 1;
-                        matrix[_nonterms_count].push_back(res_matrix);
+                        matrix[_nonterms_count].back() = res_matrix;
                     }
                 }
             }
         }
     }
+
     if (Detailed_output) {
         cout << endl << endl;
         cout << "After the closure:" << endl << endl;

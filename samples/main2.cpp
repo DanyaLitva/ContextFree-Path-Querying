@@ -71,13 +71,16 @@ int main()
 
     if (Detailed_output) print_last_matrix(matrix);
 
+    for (size_t i = 0; i < nonterms_count; ++i) {
+        matrix[i].push_back(matrix[i].front());
+    }
+
     bool flag = 1;
     while (flag) {
         flag = 0;
         for (size_t _nonterms_count = 0; _nonterms_count < nonterms_count; ++_nonterms_count) {
             for (size_t it_rule = 0; it_rule < bin_rules[_nonterms_count].size(); ++it_rule) {
                 vector<vector<vector<size_t>>> res_matrix;
-
                 if ((bin_rules[_nonterms_count][it_rule].size() != 0)) {
                     res_matrix = matrix_mul(matrix[(bin_rules[_nonterms_count][it_rule][0])].back(), matrix[(bin_rules[_nonterms_count][it_rule][1])].back(), count_vertex);
 
@@ -85,7 +88,7 @@ int main()
 
                     if (!matrix_eq(matrix[_nonterms_count].back(), res_matrix, count_vertex)) {
                         flag = 1;
-                        matrix[_nonterms_count].push_back(res_matrix);
+                        matrix[_nonterms_count].back() = res_matrix;
                     }
                 }
             }
