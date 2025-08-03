@@ -108,11 +108,7 @@ void print_last_matrix(vector < vector<vector<vector<vector<size_t>>>>>& matrix)
 
 bool extract_path(vector<size_t>& path, size_t nt, size_t start, size_t finish, vector<vector<vector<vector<vector<size_t>>>>>& matrix, vector<vector<vector<size_t>>>& bin_rules, vector<vector<vector<bool>>>& term_matrix, vector<vector<bool>>& term_rules, size_t count_vertex)
 {
-    if (start == finish) {
-        path.push_back(start);
-        return true;
-    }
-
+    //nt -> terminal
     for (size_t i = 0; i < term_matrix[start][finish].size(); ++i) {
         if (term_matrix[start][finish][i] && term_rules[nt][i]) {
             path.push_back(start);
@@ -122,13 +118,10 @@ bool extract_path(vector<size_t>& path, size_t nt, size_t start, size_t finish, 
     }
 
     size_t k = matrix[nt].back()[start][finish].front();
-
+    //nt -> B C (nonterminals)
     for (size_t rule_idx = 0; rule_idx < bin_rules[nt].size(); ++rule_idx) {
         size_t B = bin_rules[nt][rule_idx][0];
-        size_t C = bin_rules[nt][rule_idx][1];
-        //A(=nt) -> B C
-        //vector<size_t> k_list = matrix[nt].back()[start][finish];
-        //for (k = 0; k < count_vertex; ++k) {
+        size_t C = bin_rules[nt][rule_idx][1];        
         if (!matrix[B].back()[start][k].empty() &&
             !matrix[C].back()[k][finish].empty()) {
 
@@ -142,8 +135,8 @@ bool extract_path(vector<size_t>& path, size_t nt, size_t start, size_t finish, 
                 path.insert(path.end(), sub_path2.begin() + 1, sub_path2.end());
                 return true;
             }
-            //}
         }
     }
     return false;
 }
+
