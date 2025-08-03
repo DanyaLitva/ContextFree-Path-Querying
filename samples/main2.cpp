@@ -128,7 +128,7 @@ int main()
             if ((sz != path.size() - 1)) cout << " -> ";
         }
 
-        cout << endl;
+
         cout << endl <<"Terminals: ";
         for (size_t i = 0; i < path.size() - 1; ++i) {
             size_t from = path[i];
@@ -147,4 +147,44 @@ int main()
     auto end_time = std::chrono::steady_clock::now();
     double elapsed = std::chrono::duration_cast<std::chrono::milliseconds> (end_time - start_time).count();
     if(Time_output)cout << "time: " << elapsed<< " miliseconds" << endl;
+
+
+    cout << endl;
+    vector<vector<size_t>> all_paths;
+    int max_edges = 20;
+
+    for (size_t nt = 0; nt < nonterms_count; ++nt) {
+        if (!matrix[nt].back()[start][finish].empty()) {
+            vector<vector<size_t>> nt_paths = extract_all_paths_w_depth(nt, start, finish, matrix, bin_rules, term_matrix, term_rules, count_vertex, max_edges);
+            all_paths.insert(all_paths.end(), nt_paths.begin(), nt_paths.end());
+        }
+    }
+
+    if (all_paths.empty()) {
+        cout << "No paths found." << endl;
+    }
+    else {
+        cout << "Found " << all_paths.size() << " paths:" << endl;
+        for (const auto& path : all_paths) {
+            for (size_t i = 0; i < path.size(); ++i) {
+                cout << path[i];
+                if (i < path.size() - 1) cout << " -> ";
+            }
+            
+            cout << endl << "Terminals: ";
+            for (size_t i = 0; i < path.size() - 1; ++i) {
+                size_t from = path[i];
+                size_t to = path[i + 1];
+
+                for (size_t term = 0; term < terms_count; ++term) {
+                    if (term_matrix[from][to][term]) {
+                        cout << char('a' + term);
+                        break;
+                    }
+                }
+            }
+            cout << endl;
+
+        }
+    }
 }
