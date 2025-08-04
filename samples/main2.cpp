@@ -173,6 +173,7 @@ int main()
     else {
         cout << "Found " << all_paths.size() << " paths:" << endl;
         for (const auto& path : all_paths) {
+            cout << endl;
             for (size_t i = 0; i < path.size(); ++i) {
                 cout << path[i];
                 if (i < path.size() - 1) cout << " -> ";
