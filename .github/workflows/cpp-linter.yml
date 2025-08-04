@@ -2,7 +2,7 @@ name: C/C++ Linter
 
 on:
   push:
-    branches: [main, master, develop]
+    branches: [main, master, develop, multi-path]
 
 jobs:
   lint:
