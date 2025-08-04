@@ -186,6 +186,7 @@ vector<vector<size_t>> extract_all_paths_w_depth(size_t nt, size_t start, size_t
     vector<vector<size_t>> paths;
     size_t terms_count = term_rules.front().size() - 1;
 
+    // Check terminal rules
     for (size_t term = 0; term < terms_count; ++term) {
         if (term_matrix[start][finish][term] && term_rules[nt][term] && max_edges >= 1) {
             paths.push_back({ start, finish });
@@ -196,11 +197,13 @@ vector<vector<size_t>> extract_all_paths_w_depth(size_t nt, size_t start, size_t
         return paths;
     }
 
+    // Process binary rules
     for (auto& rule : bin_rules[nt]) {
         if (rule.size() < 2) continue;
         size_t B = rule[0];
         size_t C = rule[1];
 
+        // Iterate through intermediate vertices from MATRIX, not all possible
         for (size_t k : matrix[nt].back()[start][finish]) {
             vector<vector<size_t>> left_paths = extract_all_paths_w_depth(
                 B, start, k, matrix, bin_rules,
@@ -214,11 +217,14 @@ vector<vector<size_t>> extract_all_paths_w_depth(size_t nt, size_t start, size_t
 
             for (auto& left : left_paths) {
                 for (auto& right : right_paths) {
-                    vector<size_t> full_path = left;
-                    full_path.insert(full_path.end(), right.begin() + 1, right.end());
+                    // Ensure last vertex of left matches first of right
+                    if (!left.empty() && !right.empty() && left.back() == right.front()) {
+                        vector<size_t> full_path = left;
+                        full_path.insert(full_path.end(), right.begin() + 1, right.end());
 
-                    if (full_path.size() - 1 <= max_edges) {
-                        paths.push_back(full_path);
+                        if (full_path.size() - 1 <= static_cast<size_t>(max_edges)) {
+                            paths.push_back(full_path);
+                        }
                     }
                 }
             }

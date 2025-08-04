@@ -8,8 +8,10 @@
 
 using namespace std;
 
+const int MAX_DEPTH = 50;
 const bool Detailed_output = 0;
 const bool Time_output = 0;
+
 int main()
 {
     size_t count_vertex = 5;
@@ -19,6 +21,10 @@ int main()
     vector<vector<bool>> term_rules(nonterms_count, vector<bool>(terms_count + 1));
     vector<vector<vector<bool>>> term_matrix(count_vertex, vector<vector<bool>>(count_vertex, vector<bool>(terms_count + 1)));
     vector<vector<vector<vector<vector<size_t>>>>> matrix(nonterms_count, vector<vector<vector<vector<size_t>>>>());
+    vector<size_t> from_starting;
+
+    //S -> N0
+    from_starting = { 0 };
 
 
     //продукции
@@ -113,7 +119,8 @@ int main()
     cout << endl;
     auto start_time = std::chrono::steady_clock::now();
     bool found = false;
-    for (size_t nt = 0; nt < nonterms_count; ++nt) {
+
+    for (size_t nt : from_starting) {
         if (!matrix[nt].back()[start][finish].empty()) {
             found = extract_path(path, nt, start, finish, matrix, bin_rules, term_matrix, term_rules, count_vertex);
             if (found) break;
@@ -151,9 +158,9 @@ int main()
 
     cout << endl;
     vector<vector<size_t>> all_paths;
-    int max_edges = 20;
+    int max_edges = MAX_DEPTH;
 
-    for (size_t nt = 0; nt < nonterms_count; ++nt) {
+    for (size_t nt: from_starting) {
         if (!matrix[nt].back()[start][finish].empty()) {
             vector<vector<size_t>> nt_paths = extract_all_paths_w_depth(nt, start, finish, matrix, bin_rules, term_matrix, term_rules, count_vertex, max_edges);
             all_paths.insert(all_paths.end(), nt_paths.begin(), nt_paths.end());
