@@ -140,3 +140,88 @@ bool extract_path(vector<size_t>& path, size_t nt, size_t start, size_t finish, 
     return false;
 }
 
+vector<vector<size_t>> extract_all_paths(size_t nt, size_t start, size_t finish, vector<vector<vector<vector<vector<size_t>>>>>& matrix, vector<vector<vector<size_t>>>& bin_rules, vector<vector<vector<bool>>>& term_matrix, vector<vector<bool>>& term_rules, size_t count_vertex)
+{
+    vector<vector<size_t>> paths;
+
+    size_t terms_count = term_rules.front().size() - 1;
+    for (size_t term = 0; term < terms_count; ++term) {
+        if (term_matrix[start][finish][term] && term_rules[nt][term]) {
+            paths.push_back({ start, finish });
+        }
+    }
+
+    for (vector<size_t>& rule : bin_rules[nt]) {
+        if (rule.size() < 2) continue;
+        size_t B = rule[0];
+        size_t C = rule[1];
+
+        for (size_t k : matrix[nt].back()[start][finish]) {
+            vector<vector<size_t>> left_paths = extract_all_paths(
+                B, start, k, matrix, bin_rules,
+                term_matrix, term_rules, count_vertex
+            );
+
+            vector<vector<size_t>> right_paths = extract_all_paths(
+                C, k, finish, matrix, bin_rules,
+                term_matrix, term_rules, count_vertex
+            );
+
+            for (vector<size_t>& left : left_paths) {
+                for (vector<size_t>& right : right_paths) {
+                    vector<size_t> full_path = left;
+                    full_path.insert(full_path.end(), right.begin() + 1, right.end());
+                    paths.push_back(full_path);
+                }
+            }
+        }
+    }
+
+    return paths;
+}
+
+
+vector<vector<size_t>> extract_all_paths_w_depth(size_t nt, size_t start, size_t finish, vector<vector<vector<vector<vector<size_t>>>>>& matrix, vector<vector<vector<size_t>>>& bin_rules, vector<vector<vector<bool>>>& term_matrix, vector<vector<bool>>& term_rules, size_t count_vertex, int max_depth)
+{
+    vector<vector<size_t>> paths;
+    size_t terms_count = term_rules.front().size() - 1;
+
+    for (size_t term = 0; term < terms_count; ++term) {
+        if (term_matrix[start][finish][term] && term_rules[nt][term]) {
+            paths.push_back({ start, finish });
+        }
+    }
+
+    if (max_depth <= 1) {
+        return paths;
+    }
+
+    for (vector<size_t>& rule : bin_rules[nt]) {
+        if (rule.size() != 2) continue;
+        size_t B = rule[0];
+        size_t C = rule[1];
+
+        for (size_t k : matrix[nt].back()[start][finish]) {
+            vector<vector<size_t>> left_paths = extract_all_paths_w_depth(
+                B, start, k, matrix, bin_rules,
+                term_matrix, term_rules, count_vertex, max_depth - 1
+            );
+
+            vector<vector<size_t>> right_paths = extract_all_paths_w_depth(
+                C, k, finish, matrix, bin_rules,
+                term_matrix, term_rules, count_vertex, max_depth - 1
+            );
+
+            for (vector<size_t>& left : left_paths) {
+                for (vector<size_t>& right : right_paths) {
+                    vector<size_t> full_path = left;
+                    full_path.insert(full_path.end(), right.begin() + 1, right.end());
+
+                    paths.push_back(full_path);
+                }
+            }
+        }
+    }
+
+    return paths;
+}
