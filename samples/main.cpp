@@ -8,7 +8,10 @@
 
 using namespace std;
 
+const int MAX_DEPTH = 20;
 const bool Detailed_output = 0;
+
+
 
 int main()
 {
@@ -19,7 +22,10 @@ int main()
     vector<vector<bool>> term_rules(nonterms_count, vector<bool>(terms_count + 1));
     vector<vector<vector<bool>>> term_matrix(count_vertex, vector<vector<bool>>(count_vertex, vector<bool>(terms_count + 1)));
     vector<vector<vector<vector<vector<size_t>>>>> matrix(nonterms_count, vector<vector<vector<vector<size_t>>>>());
+    vector<size_t> from_starting;
 
+    //S -> N0|N1|N2|N3
+    from_starting = { 0, 1, 2, 3 };
 
     //продукции
     bin_rules = {
@@ -119,7 +125,7 @@ int main()
     cout << endl;
 
     bool found = false;
-    for (size_t nt = 0; nt < nonterms_count; ++nt) {
+    for (size_t nt : from_starting) {
         if (!matrix[nt].back()[start][finish].empty()) {
             found = extract_path(path, nt, start, finish, matrix, bin_rules, term_matrix, term_rules, count_vertex);
             if (found) break;
@@ -134,7 +140,6 @@ int main()
             if ((sz != path.size() - 1)) cout << " -> ";
         }
 
-        cout << endl;
         cout << endl <<"Terminals: ";
         for (size_t i = 0; i < path.size() - 1; ++i) {
             size_t from = path[i];
@@ -149,5 +154,45 @@ int main()
         }
 
         cout << endl;
+    }
+
+    cout << endl;
+    vector<vector<size_t>> all_paths;
+    int max_edges = MAX_DEPTH;
+
+    for (size_t nt : from_starting) {
+        if (!matrix[nt].back()[start][finish].empty()) {
+            vector<vector<size_t>> nt_paths = extract_all_paths_w_depth(nt, start, finish, matrix, bin_rules, term_matrix, term_rules, count_vertex, max_edges);
+            all_paths.insert(all_paths.end(), nt_paths.begin(), nt_paths.end());
+        }
+    }
+
+    if (all_paths.empty()) {
+        cout << "No paths found." << endl;
+    }
+    else {
+        cout << "Found " << all_paths.size() << " paths:" << endl;
+        for (const auto& path : all_paths) {
+            cout << endl;
+            for (size_t i = 0; i < path.size(); ++i) {
+                cout << path[i];
+                if (i < path.size() - 1) cout << " -> ";
+            }
+
+            cout << endl << "Terminals: ";
+            for (size_t i = 0; i < path.size() - 1; ++i) {
+                size_t from = path[i];
+                size_t to = path[i + 1];
+
+                for (size_t term = 0; term < terms_count; ++term) {
+                    if (term_matrix[from][to][term]) {
+                        cout << char('a' + term);
+                        break;
+                    }
+                }
+            }
+            cout << endl;
+
+        }
     }
 }

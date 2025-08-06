@@ -8,35 +8,33 @@
 
 using namespace std;
 
-const int MAX_DEPTH = 50;
+const int MAX_DEPTH = 20;
 const bool Detailed_output = 0;
-const bool Time_output = 0;
 
 int main()
 {
-    size_t count_vertex = 5;
-    size_t nonterms_count = 4; 
-    size_t terms_count = 3;    
+    size_t count_vertex = 6;
+    size_t nonterms_count = 4;
+    size_t terms_count = 4;
     vector <vector <vector<size_t> > >bin_rules(nonterms_count, vector<vector<size_t>>(nonterms_count, vector<size_t>()));
     vector<vector<bool>> term_rules(nonterms_count, vector<bool>(terms_count + 1));
     vector<vector<vector<bool>>> term_matrix(count_vertex, vector<vector<bool>>(count_vertex, vector<bool>(terms_count + 1)));
     vector<vector<vector<vector<vector<size_t>>>>> matrix(nonterms_count, vector<vector<vector<vector<size_t>>>>());
     vector<size_t> from_starting;
 
-    //S -> N0
-    from_starting = { 0 };
-
+    //S -> N0|N1|N2|N3
+    from_starting = { 0, 1, 2, 3 };
 
     //продукции
     bin_rules = {
         {
-            {2,1}//N0
+            {}//N0
 },
     {
-        {0,3}//N1
+        {}//N1
 },
     {
-        {}, //N2
+        {0,1},{2,3} //N2
 },
     {
         {}//N3
@@ -46,19 +44,20 @@ int main()
     //терминалы
     term_rules = {
         // дополнительный элемент - пустое слово 
-        {0,0,1,0,0}, //N0 -> c
-        {0,0,0,0,0}, //N1 -> 
-        {1,0,0,0,0}, //N2 -> a
-        {0,1,0,0,0}  //N3 -> b
+        {1,0,0,0,0}, //N0 -> a
+        {0,1,0,0,0}, //N1 -> b
+        {0,0,1,0,0}, //N2 -> c
+        {0,0,0,1,0}  //N3 -> d
     };
 
     term_matrix = {
-        //     0         1         2         3         4     
-          {{0,0,0,0},{1,0,0,0},{0,0,0,0},{0,0,1,0},{0,0,0,0}}, //0
-          {{0,0,0,0},{0,0,0,0},{1,0,0,0},{0,0,0,0},{0,0,0,0}}, //1
-          {{1,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}}, //2
-          {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,1,0,0}}, //3
-          {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,1,0,0},{0,0,0,0}} //4
+        //      0           1           2           3           4           5         
+          {{0,0,0,0,0},{1,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{1,0,0,0,0},{1,0,0,0,0}}, //0
+          {{0,0,0,0,0},{0,0,0,0,0},{0,1,0,0,0},{0,1,0,0,0},{0,0,0,0,0},{0,0,0,0,0}}, //1
+          {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,1,0}}, //2
+          {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,1,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,1,0}}, //3
+          {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,1,0,0,0}}, //4
+          {{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0},{0,0,0,0,0}} //5
     };
 
     for (size_t i = 0; i < nonterms_count; ++i) {
@@ -117,9 +116,8 @@ int main()
     cout << "Start and Finish vertex: ";
     cin >> start >> finish;
     cout << endl;
-    auto start_time = std::chrono::steady_clock::now();
-    bool found = false;
 
+    bool found = false;
     for (size_t nt : from_starting) {
         if (!matrix[nt].back()[start][finish].empty()) {
             found = extract_path(path, nt, start, finish, matrix, bin_rules, term_matrix, term_rules, count_vertex);
@@ -135,8 +133,8 @@ int main()
             if ((sz != path.size() - 1)) cout << " -> ";
         }
 
-
-        cout << endl <<"Terminals: ";
+        cout << endl;
+        cout << endl << "Terminals: ";
         for (size_t i = 0; i < path.size() - 1; ++i) {
             size_t from = path[i];
             size_t to = path[i + 1];
@@ -151,16 +149,13 @@ int main()
 
         cout << endl;
     }
-    auto end_time = std::chrono::steady_clock::now();
-    double elapsed = std::chrono::duration_cast<std::chrono::milliseconds> (end_time - start_time).count();
-    if(Time_output)cout << "time: " << elapsed<< " miliseconds" << endl;
 
 
     cout << endl;
     vector<vector<size_t>> all_paths;
     int max_edges = MAX_DEPTH;
 
-    for (size_t nt: from_starting) {
+    for (size_t nt : from_starting) {
         if (!matrix[nt].back()[start][finish].empty()) {
             vector<vector<size_t>> nt_paths = extract_all_paths_w_depth(nt, start, finish, matrix, bin_rules, term_matrix, term_rules, count_vertex, max_edges);
             all_paths.insert(all_paths.end(), nt_paths.begin(), nt_paths.end());
@@ -178,7 +173,7 @@ int main()
                 cout << path[i];
                 if (i < path.size() - 1) cout << " -> ";
             }
-            
+
             cout << endl << "Terminals: ";
             for (size_t i = 0; i < path.size() - 1; ++i) {
                 size_t from = path[i];
