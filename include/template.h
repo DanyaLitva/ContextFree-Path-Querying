@@ -8,9 +8,9 @@
 #include <vector>
 #include <algorithm>
 
-int check();
-
 using namespace std;
+
+int check();
 
 vector<vector<vector<size_t>>> matrix_mul(vector<vector<vector<size_t>>> left, vector<vector<vector<size_t>>> right, size_t vertex);
 
